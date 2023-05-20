@@ -14,6 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { ColorModeSwitcher } from './ColorModeSwitcher';
 import { Logo } from './Logo';
+import GMaps from './components/maps/GMaps';
 
 function App() {
   return (
@@ -21,10 +22,7 @@ function App() {
       <Box display="flex" pt="3%" pb="10%" px="5%" columnGap="5%">
         <Box width="60%">
           <Box display="flex" justifyContent="center" border="1px solid red">
-            <Box>
-              <Box>left panel</Box>
-              <Box>left panel</Box>
-            </Box>
+            <GMaps />
           </Box>
         </Box>
 
