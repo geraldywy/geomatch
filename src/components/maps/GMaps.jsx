@@ -7,51 +7,10 @@ import './style.css';
 import GoogleMap from 'google-maps-react-markers';
 import { Box } from '@chakra-ui/react';
 
-const coordinates = [
-  [
-    {
-      lat: 45.4046987,
-      lng: 12.2472504,
-      name: 'Venice',
-    },
-    {
-      lat: 41.9102415,
-      lng: 12.3959151,
-      name: 'Rome',
-    },
-    {
-      lat: 45.4628328,
-      lng: 9.1076927,
-      name: 'Milan',
-    },
-  ],
-  [
-    {
-      lat: 40.8518,
-      lng: 14.2681,
-      name: 'Naples',
-    },
-    {
-      lat: 43.7696,
-      lng: 11.2558,
-      name: 'Florence',
-    },
-    {
-      lat: 37.5023,
-      lng: 15.0873,
-      name: 'Catania',
-    },
-  ],
-];
-
-export default function GMaps() {
+export default function GMaps({ currCoordinates, pendingPlace }) {
   const mapRef = useRef(null);
-  const [mapReady, setMapReady] = useState(false);
   const [mapBounds, setMapBounds] = useState({});
-  const [usedCoordinates, setUsedCoordinates] = useState(0);
-  const [currCoordinates, setCurrCoordinates] = useState(
-    coordinates[usedCoordinates]
-  );
+
   const [highlighted, setHighlighted] = useState(null);
 
   /**
@@ -62,7 +21,6 @@ export default function GMaps() {
   // eslint-disable-next-line no-unused-vars
   const onGoogleApiLoaded = ({ map, maps }) => {
     mapRef.current = map;
-    setMapReady(true);
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -89,26 +47,18 @@ export default function GMaps() {
     setHighlighted(null);
   };
 
-  const updateCoordinates = () => setUsedCoordinates(!usedCoordinates ? 1 : 0);
-
-  useEffect(() => {
-    setCurrCoordinates(coordinates[usedCoordinates]);
-  }, [usedCoordinates]);
+  const markerStyle = {
+    position: 'absolute',
+    transform: 'translate(-50%, -50%)',
+  };
 
   return (
     <Box w="full" minH="360px" h="full">
-      {/* {mapReady && (
-        <Info
-          buttonAction={updateCoordinates}
-          coordinates={currCoordinates}
-          mapBounds={mapBounds}
-        />
-      )} */}
       <div className="map-container">
         <GoogleMap
           apiKey=""
-          defaultCenter={{ lat: 45.4046987, lng: 12.2472504 }}
-          defaultZoom={5}
+          defaultCenter={{ lat: 1.2929, lng: 103.8547 }}
+          defaultZoom={15}
           options={mapOptions}
           mapMinHeight="600px"
           onGoogleApiLoaded={onGoogleApiLoaded}
@@ -121,9 +71,17 @@ export default function GMaps() {
               lng={lng}
               markerId={name}
               onClick={onMarkerClick}
-              className="marker"
+              style={markerStyle}
             />
           ))}
+          {pendingPlace && (
+            <Marker
+              markerId={pendingPlace.name}
+              lat={pendingPlace.lat}
+              lng={pendingPlace.lng}
+              style={markerStyle}
+            />
+          )}
         </GoogleMap>
         {highlighted && (
           <div className="highlighted">

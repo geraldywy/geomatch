@@ -49,10 +49,10 @@ button {
   background-color: #000;
 }
 
-.marker {
+/* .marker {
   transform: scale(0);
   animation: 400ms reveal forwards;
-}
+} */
 
 .map-container {
   position: relative;
