@@ -1,7 +1,5 @@
 // import GoogleMap from 'google-maps-react-markers/dist/google-map';
 import { useEffect, useRef, useState } from 'react';
-import Info from './Info';
-import mapOptions from './map-options.json';
 import Marker from './Marker';
 import './style.css';
 import GoogleMap from 'google-maps-react-markers';
@@ -56,10 +54,9 @@ export default function GMaps({ currCoordinates, pendingPlace }) {
     <Box w="full" minH="360px" h="full">
       <div className="map-container">
         <GoogleMap
-          apiKey=""
+          apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
           defaultCenter={{ lat: 1.2929, lng: 103.8547 }}
           defaultZoom={15}
-          options={mapOptions}
           mapMinHeight="600px"
           onGoogleApiLoaded={onGoogleApiLoaded}
           onChange={onMapChange}

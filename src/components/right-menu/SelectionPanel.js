@@ -1,5 +1,6 @@
 import { Box, Button, Heading, Input, Text } from '@chakra-ui/react';
 import { usePlacesWidget } from 'react-google-autocomplete';
+import Autocomplete from 'react-google-autocomplete';
 import { AddIcon } from '@chakra-ui/icons';
 
 export default function SelectionPanel({
@@ -9,24 +10,31 @@ export default function SelectionPanel({
   setPendingPlace,
 }) {
   const { ref } = usePlacesWidget({
-    apiKey: '',
+    apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     onPlaceSelected: place => {
       console.log(place);
-      setPendingPlace(place);
+      // setPendingPlace(place);
     },
     options: {
-      types: ['(regions)'],
-      componentRestrictions: { country: 'sg' },
+      types: '',
+      fields: [
+        'name',
+        'place_id',
+        'rating',
+        'reviews',
+        'formatted_address',
+        'geometry.location',
+      ],
     },
   });
 
   return (
-    <Box>
+    <Box w="full">
       <Heading mb="8">Add a query point</Heading>
 
       <Box display="flex" alignItems="center" columnGap="4">
         <Text fontSize="lg">Location:</Text>
-        <Input placeholder="Enter a location" size="md" ref={ref} />
+        <Input placeholder="Enter a location" size="md" ref={ref} mr="6" />
       </Box>
 
       {pendingPlace && (
