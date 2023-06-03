@@ -5,7 +5,7 @@ import './style.css';
 import GoogleMap from 'google-maps-react-markers';
 import { Box } from '@chakra-ui/react';
 
-export default function GMaps({ currCoordinates, pendingPlace }) {
+export default function GMaps({ selPlaces }) {
   const mapRef = useRef(null);
   const [mapBounds, setMapBounds] = useState({});
 
@@ -61,24 +61,18 @@ export default function GMaps({ currCoordinates, pendingPlace }) {
           onGoogleApiLoaded={onGoogleApiLoaded}
           onChange={onMapChange}
         >
-          {currCoordinates.map(({ lat, lng, name }, index) => (
-            <Marker
-              key={index}
-              lat={lat}
-              lng={lng}
-              markerId={name}
-              onClick={onMarkerClick}
-              style={markerStyle}
-            />
-          ))}
-          {pendingPlace && (
-            <Marker
-              markerId={pendingPlace.name}
-              lat={pendingPlace.lat}
-              lng={pendingPlace.lng}
-              style={markerStyle}
-            />
-          )}
+          {selPlaces &&
+            selPlaces.map(({ geometry, name, listNum }, index) => (
+              <Marker
+                key={index}
+                lat={geometry.location.lat()}
+                lng={geometry.location.lng()}
+                markerId={name}
+                onClick={onMarkerClick}
+                style={markerStyle}
+                num={listNum}
+              />
+            ))}
         </GoogleMap>
         {highlighted && (
           <div className="highlighted">

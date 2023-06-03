@@ -1,9 +1,26 @@
 import { func, number, oneOfType, string } from 'prop-types';
-import markerPin from './marker-pin.png';
+import pin1 from './pins/pin1.png';
+import pin2 from './pins/pin2.png';
+import pin3 from './pins/pin3.png';
+import pin4 from './pins/pin4.png';
+import pin5 from './pins/pin5.png';
+import defaultPin from './pins/marker-pin.png';
+import { Image } from '@chakra-ui/react';
 
-const Marker = ({ className, lat, lng, markerId, onClick, ...props }) => {
+const Marker = ({ className, lat, lng, markerId, onClick, num, ...props }) => {
+  var mapping = {
+    1: pin1,
+    2: pin2,
+    3: pin3,
+    4: pin4,
+    5: pin5,
+  };
+  var markerPin = defaultPin;
+  if (num in mapping) {
+    markerPin = mapping[num];
+  }
   return (
-    <img
+    <Image
       className={className}
       src={markerPin}
       // eslint-disable-next-line react/no-unknown-property
@@ -11,7 +28,8 @@ const Marker = ({ className, lat, lng, markerId, onClick, ...props }) => {
       // eslint-disable-next-line react/no-unknown-property
       lng={lng}
       onClick={e => (onClick ? onClick(e, { markerId, lat, lng }) : null)}
-      style={{ cursor: 'pointer', fontSize: 40 }}
+      boxSize="70px"
+      objectFit="contain"
       alt={markerId}
       {...props}
     />
