@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react';
 import { usePlacesWidget } from 'react-google-autocomplete';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
+import { fireSendQuery } from '../../api/api';
 
 export default function SelectionPanel({ selPlaces, setSelPlaces }) {
   const { ref } = usePlacesWidget({
@@ -125,7 +126,12 @@ export default function SelectionPanel({ selPlaces, setSelPlaces }) {
               ))}
             </Box>
             <Box w="full" textAlign="center" my="16">
-              <Button w="80%" colorScheme="whatsapp" variant="solid">
+              <Button
+                w="80%"
+                colorScheme="whatsapp"
+                variant="solid"
+                onClick={() => fireSendQuery(selPlaces)}
+              >
                 Search by example
               </Button>
             </Box>
