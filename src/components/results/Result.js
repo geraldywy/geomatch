@@ -13,20 +13,32 @@ import {
 } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { getMarker } from '../maps/Marker';
+import GMaps from '../maps/GMaps';
+import noImageAvail from './no_image_available.jpeg';
 
 export default function Result({ res, num }) {
   const [expand, setExpand] = useState(false);
 
-  const ShowExpandedResult = () => {
-    console.log('expand!');
+  const ShowExpandedResult = ({ res }) => {
     return (
-      <Box>
-        <Text>oh yea, its big brain time</Text>
+      <Box mt="10">
+        <GMaps
+          selPlaces={res.map((r, idx) => ({
+            ...r.place,
+            geometry: {
+              location: {
+                lat: () => r.place.geometry.location.lat,
+                lng: () => r.place.geometry.location.lng,
+              },
+            },
+            listNum: idx + 1,
+          }))}
+        />
       </Box>
     );
   };
 
-  const ShowSummary = ({ res }) => {
+  const ShowSummary = ({ res, expand }) => {
     const insertBetween = (ele, array) => {
       return array.flatMap(x => [ele, x]).slice(1);
     };
@@ -47,7 +59,12 @@ export default function Result({ res, num }) {
                 ></hr>
               </Box>
             ) : (
-              <PointSummary poi={r} idx={idx / 2} key={idx} />
+              <PointSummary
+                placeAndCost={r}
+                idx={idx / 2}
+                key={idx}
+                expand={expand}
+              />
             )}
           </Box>
         ))}
@@ -55,8 +72,9 @@ export default function Result({ res, num }) {
     );
   };
 
-  const PointSummary = ({ poi, idx }) => {
-    console.log();
+  const PointSummary = ({ placeAndCost, idx, expand }) => {
+    const poi = placeAndCost.place;
+    const cost = placeAndCost.cost;
     return (
       <Box
         display="flex"
@@ -68,9 +86,55 @@ export default function Result({ res, num }) {
           boxSize="70px"
           objectFit="contain"
           src={getMarker(idx + 1)}
-          alt="Dan Abramov"
+          alt="marker"
         />
-        <Text maxW="170px">{poi.name}</Text>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          columnGap="2"
+        >
+          <Image boxSize="18px" objectFit="contain" src={poi.icon} alt="icon" />
+          <Text maxW="170px">{poi.name}</Text>
+        </Box>
+        {expand && (
+          <Box
+            mt="4"
+            display="flex"
+            flexDir="column"
+            justifyContent="left"
+            alignItems="center"
+            rowGap="2"
+          >
+            <Box>
+              <Image
+                boxSize="200px"
+                objectFit="contain"
+                src={
+                  poi.photo_reference
+                    ? `https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photo_reference=${poi.photo_reference}&key=${process.env.REACT_APP_GOOGLE_MAPS_API_KEY}`
+                    : noImageAvail
+                }
+                alt={poi.name}
+              />
+            </Box>
+
+            <Box
+              display="flex"
+              justifyContent="center"
+              alignItems="center"
+              columnGap="2"
+            >
+              <Text>Node cost: {cost.toFixed(5)}</Text>
+              <Tooltip
+                label="Node cost is the total absolute distance (in km) deviated from the corresponding given point in the query."
+                fontSize="md"
+              >
+                <InfoOutlineIcon />
+              </Tooltip>
+            </Box>
+          </Box>
+        )}
       </Box>
     );
   };
@@ -80,7 +144,7 @@ export default function Result({ res, num }) {
       px="6"
       pt="1"
       pb="4"
-      border="1px solid gray"
+      border="1px solid rgb(63,94,251)"
       my="7"
       borderRadius="lg"
       _hover={{ boxShadow: 'dark-lg' }}
@@ -102,7 +166,9 @@ export default function Result({ res, num }) {
             columnGap="2"
             my="1"
           >
-            <Text size="sm">Cost: {res.cost.toFixed(5)}</Text>
+            <Text size="sm">
+              Cost: {res.ttl_cost ? res.ttl_cost.toFixed(5) : 'N/A'}
+            </Text>
             <Tooltip
               label="Cost is estimated as the total absolute distance (in km) deviated from given query."
               fontSize="md"
@@ -124,7 +190,7 @@ export default function Result({ res, num }) {
         />
       </Box>
       <Box px="6" py="5">
-        <ShowSummary res={res.places} />
+        <ShowSummary res={res.places} expand={expand} />
         {expand && <ShowExpandedResult res={res.places} />}
       </Box>
     </Box>

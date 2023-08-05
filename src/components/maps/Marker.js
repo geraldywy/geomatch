@@ -17,7 +17,7 @@ const Marker = ({ className, lat, lng, markerId, onClick, num, ...props }) => {
       // eslint-disable-next-line react/no-unknown-property
       lng={lng}
       onClick={e => (onClick ? onClick(e, { markerId, lat, lng }) : null)}
-      boxSize="70px"
+      boxSize="60px"
       objectFit="contain"
       alt={markerId}
       {...props}

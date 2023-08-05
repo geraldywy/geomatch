@@ -24,9 +24,28 @@ function App() {
   return (
     <ChakraProvider theme={theme}>
       <Box px="5%">
+        <Box
+          pt="8"
+          pb="2"
+          px="1"
+          display="flex"
+          flexDir="column"
+          justifyContent="center"
+          alignItems="left"
+          rowGap="1"
+        >
+          <Heading size="2xl">GeoMatch</Heading>
+          <Text as="i" fontSize="md">
+            Spatial Search By Example
+          </Text>
+        </Box>
         <Box display="flex" pt="3%" pb="3%" columnGap="5%">
           <Box width="60%">
-            <Box display="flex" justifyContent="center" border="1px solid red">
+            <Box
+              display="flex"
+              justifyContent="center"
+              border="1px solid rgb(63,94,251)"
+            >
               <GMaps selPlaces={selPlaces} />
             </Box>
           </Box>
@@ -34,7 +53,7 @@ function App() {
           <Box width="33%">
             <Box
               display="flex"
-              border="1px solid gray"
+              border="1px solid rgb(63,94,251)"
               p="4"
               borderRadius="xl"
               boxShadow="xl"

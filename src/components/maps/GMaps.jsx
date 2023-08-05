@@ -55,8 +55,15 @@ export default function GMaps({ selPlaces }) {
       <div className="map-container">
         <GoogleMap
           apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
-          defaultCenter={{ lat: 1.2929, lng: 103.8547 }}
-          defaultZoom={15}
+          defaultCenter={
+            selPlaces && selPlaces.length > 0
+              ? {
+                  lat: selPlaces[0].geometry.location.lat(),
+                  lng: selPlaces[0].geometry.location.lng(),
+                }
+              : { lat: 1.2929, lng: 103.8547 }
+          }
+          defaultZoom={17}
           mapMinHeight="600px"
           onGoogleApiLoaded={onGoogleApiLoaded}
           onChange={onMapChange}
