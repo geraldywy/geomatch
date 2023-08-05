@@ -8,21 +8,10 @@ import defaultPin from './pins/marker-pin.png';
 import { Image } from '@chakra-ui/react';
 
 const Marker = ({ className, lat, lng, markerId, onClick, num, ...props }) => {
-  var mapping = {
-    1: pin1,
-    2: pin2,
-    3: pin3,
-    4: pin4,
-    5: pin5,
-  };
-  var markerPin = defaultPin;
-  if (num in mapping) {
-    markerPin = mapping[num];
-  }
   return (
     <Image
       className={className}
-      src={markerPin}
+      src={getMarker(num)}
       // eslint-disable-next-line react/no-unknown-property
       lat={lat}
       // eslint-disable-next-line react/no-unknown-property
@@ -59,3 +48,19 @@ Marker.propTypes = {
 };
 
 export default Marker;
+
+export const getMarker = num => {
+  var mapping = {
+    1: pin1,
+    2: pin2,
+    3: pin3,
+    4: pin4,
+    5: pin5,
+  };
+  var markerPin = defaultPin;
+  if (num in mapping) {
+    markerPin = mapping[num];
+  }
+
+  return markerPin;
+};

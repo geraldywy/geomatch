@@ -10,7 +10,11 @@ import { usePlacesWidget } from 'react-google-autocomplete';
 import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
 import { fireSendQuery } from '../../api/api';
 
-export default function SelectionPanel({ selPlaces, setSelPlaces }) {
+export default function SelectionPanel({
+  selPlaces,
+  setSelPlaces,
+  setResults,
+}) {
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
     onPlaceSelected: place => {
@@ -41,21 +45,7 @@ export default function SelectionPanel({ selPlaces, setSelPlaces }) {
     },
   });
 
-  return (
-    <Box w="full">
-      <Heading mb="8">Add a query point</Heading>
-
-      <Box display="flex" alignItems="center" columnGap="4">
-        <Text fontSize="lg">Location:</Text>
-        <Input placeholder="Enter a location" size="md" ref={ref} mr="6" />
-      </Box>
-
-      <Box my="12">
-        {selPlaces && selPlaces.length > 0 ? (
-          <Box>
-            <Heading>Your Current Selection:</Heading>
-            <Box>
-              {/* {
+  /* {
     "formatted_address": "1 Jurong West Central 2, Singapore 648886",
     "geometry": {
         "location": {
@@ -96,7 +86,26 @@ export default function SelectionPanel({ selPlaces, setSelPlaces }) {
     ],
     "html_attributions": [],
     "listNum": 1,
-} */}
+} */
+
+  return (
+    <Box w="full">
+      <Heading mb="4" as="h1" size="md">
+        Add a query point:
+      </Heading>
+
+      <Box display="flex" alignItems="center" columnGap="4">
+        <Text fontSize="lg">Location:</Text>
+        <Input placeholder="Enter a location" size="md" ref={ref} mr="6" />
+      </Box>
+
+      <Box my="12">
+        {selPlaces && selPlaces.length > 0 ? (
+          <Box>
+            <Heading as="h1" size="md" pb="2">
+              Your Current Selection:
+            </Heading>
+            <Box>
               {selPlaces.map((x, index) => (
                 <Box key={index}>
                   <Box display="flex" alignItems="center" columnGap="3">
@@ -107,6 +116,7 @@ export default function SelectionPanel({ selPlaces, setSelPlaces }) {
                       icon={<DeleteIcon />}
                       colorScheme="red"
                       variant="outline"
+                      size="sm"
                       onClick={() =>
                         setSelPlaces(prev => {
                           var temp = [];
@@ -130,7 +140,7 @@ export default function SelectionPanel({ selPlaces, setSelPlaces }) {
                 w="80%"
                 colorScheme="whatsapp"
                 variant="solid"
-                onClick={() => fireSendQuery(selPlaces)}
+                onClick={() => fireSendQuery(selPlaces, setResults)}
               >
                 Search by example
               </Button>
