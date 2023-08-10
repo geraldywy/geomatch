@@ -2,6 +2,7 @@ import { Box, Heading, Text } from '@chakra-ui/react';
 import React from 'react';
 import Result from './Result';
 import { InfoOutlineIcon } from '@chakra-ui/icons';
+import FadeIn from 'react-fade-in/lib/FadeIn';
 
 export default function ResultPanel({ results }) {
   return (
@@ -21,9 +22,11 @@ export default function ResultPanel({ results }) {
         </Text>
       </Box>
       <Box>
-        {results.map((res, idx) => (
-          <Result res={res} key={idx + res.cost} num={idx + 1} />
-        ))}
+        <FadeIn delay={100}>
+          {results.map((res, idx) => (
+            <Result res={res} key={idx + res.cost} num={idx + 1} />
+          ))}
+        </FadeIn>
       </Box>
     </Box>
   );

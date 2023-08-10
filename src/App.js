@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
-import {
-  ChakraProvider,
-  Box,
-  Text,
-  Link,
-  VStack,
-  Code,
-  Grid,
-  theme,
-  Button,
-  Show,
-  Hide,
-  Heading,
-} from '@chakra-ui/react';
+import { ChakraProvider, Box, Text, theme, Heading } from '@chakra-ui/react';
 import GMaps from './components/maps/GMaps';
-import SelectionPanel from './components/right-menu/SelectionPanel';
 import ResultPanel from './components/results/ResultPanel';
+import RightMenu from './components/right-menu/RightMenu';
 
 function App() {
   const [selPlaces, setSelPlaces] = useState([]);
   const [results, setResults] = useState(null);
+
+  const [queryCenter, setQueryCenter] = useState({
+    lat: 1.2929,
+    lng: 103.8547,
+  });
+  const [mapRef, setMapRef] = useState(null);
+  const [mapsRef, setMapsRef] = useState(null);
+  const [circleRef, setCircleRef] = useState(null);
+  const [showSelectQueryRadius, setShowSelectQueryRadius] = useState(false);
+
+  const [circleRadius, setCircleRadius] = useState(0);
 
   return (
     <ChakraProvider theme={theme}>
@@ -46,24 +44,32 @@ function App() {
               justifyContent="center"
               border="1px solid rgb(63,94,251)"
             >
-              <GMaps selPlaces={selPlaces} />
+              <GMaps
+                selPlaces={selPlaces}
+                queryCenter={queryCenter}
+                setMapRef={setMapRef}
+                setMapsRef={setMapsRef}
+                setCircleRef={setCircleRef}
+                circleRadius={circleRadius}
+              />
             </Box>
           </Box>
 
           <Box width="33%">
-            <Box
-              display="flex"
-              border="1px solid rgb(63,94,251)"
-              p="4"
-              borderRadius="xl"
-              boxShadow="xl"
-            >
-              <SelectionPanel
-                selPlaces={selPlaces}
-                setSelPlaces={setSelPlaces}
-                setResults={setResults}
-              />
-            </Box>
+            <RightMenu
+              selPlaces={selPlaces}
+              setSelPlaces={setSelPlaces}
+              setResults={setResults}
+              queryCenter={queryCenter}
+              setQueryCenter={setQueryCenter}
+              showSelectQueryRadius={showSelectQueryRadius}
+              setShowSelectQueryRadius={setShowSelectQueryRadius}
+              mapRef={mapRef}
+              mapsRef={mapsRef}
+              circleRef={circleRef}
+              circleRadius={circleRadius}
+              setCircleRadius={setCircleRadius}
+            />
           </Box>
         </Box>
 

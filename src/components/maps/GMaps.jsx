@@ -5,8 +5,14 @@ import './style.css';
 import GoogleMap from 'google-maps-react-markers';
 import { Box } from '@chakra-ui/react';
 
-export default function GMaps({ selPlaces }) {
-  const mapRef = useRef(null);
+export default function GMaps({
+  selPlaces,
+  setCircleRef,
+  setMapRef,
+  setMapsRef,
+  circleRadius,
+  skipOnGoogleApiLoaded,
+}) {
   const [mapBounds, setMapBounds] = useState({});
 
   const [highlighted, setHighlighted] = useState(null);
@@ -18,7 +24,25 @@ export default function GMaps({ selPlaces }) {
    */
   // eslint-disable-next-line no-unused-vars
   const onGoogleApiLoaded = ({ map, maps }) => {
-    mapRef.current = map;
+    if (skipOnGoogleApiLoaded) {
+      return;
+    }
+
+    setMapRef(map);
+    setMapsRef(maps);
+
+    setCircleRef(
+      new maps.Circle({
+        strokeColor: '#FF0000',
+        strokeOpacity: 0.8,
+        strokeWeight: 2,
+        fillColor: '#FF0000',
+        fillOpacity: 0.3,
+        map,
+        center: { lat: 1.306397, lng: 103.838778 },
+        radius: circleRadius,
+      })
+    );
   };
 
   // eslint-disable-next-line no-unused-vars
@@ -56,7 +80,10 @@ export default function GMaps({ selPlaces }) {
         <GoogleMap
           apiKey={process.env.REACT_APP_GOOGLE_MAPS_API_KEY}
           defaultCenter={
-            selPlaces && selPlaces.length > 0
+            selPlaces &&
+            selPlaces.length > 0 &&
+            selPlaces[0].geometry &&
+            selPlaces[0].geometry.location
               ? {
                   lat: selPlaces[0].geometry.location.lat(),
                   lng: selPlaces[0].geometry.location.lng(),

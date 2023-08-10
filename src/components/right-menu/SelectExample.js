@@ -7,13 +7,14 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import { AddIcon, DeleteIcon } from '@chakra-ui/icons';
-import { fireSendQuery } from '../../api/api';
+import { ArrowDownIcon, DeleteIcon } from '@chakra-ui/icons';
+import FadeIn from 'react-fade-in/lib/FadeIn';
 
-export default function SelectionPanel({
+export default function SelectExample({
   selPlaces,
   setSelPlaces,
-  setResults,
+  showSelectQueryRadius,
+  setShowSelectQueryRadius,
 }) {
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -103,48 +104,56 @@ export default function SelectionPanel({
         {selPlaces && selPlaces.length > 0 ? (
           <Box>
             <Heading as="h1" size="md" pb="2">
-              Your Current Selection:
+              1. Your Current Selection:
             </Heading>
-            <Box>
-              {selPlaces.map((x, index) => (
-                <Box key={index}>
-                  <Box display="flex" alignItems="center" columnGap="3">
-                    <Text fontSize="md">
-                      {x.listNum}. {x.name}
-                    </Text>
-                    <IconButton
-                      icon={<DeleteIcon />}
-                      colorScheme="red"
-                      variant="outline"
-                      size="sm"
-                      onClick={() =>
-                        setSelPlaces(prev => {
-                          var temp = [];
-                          for (var i = 0; i < prev.length; i++) {
-                            if (prev[i].name === x.name) {
-                              continue;
+            <Box ml="2">
+              <FadeIn>
+                {selPlaces.map((x, index) => (
+                  <Box key={index}>
+                    <Box display="flex" alignItems="center" columnGap="3">
+                      <Text fontSize="md">
+                        {x.listNum}. {x.name}
+                      </Text>
+                      <IconButton
+                        icon={<DeleteIcon />}
+                        colorScheme="red"
+                        variant="outline"
+                        size="sm"
+                        onClick={() =>
+                          setSelPlaces(prev => {
+                            var temp = [];
+                            for (var i = 0; i < prev.length; i++) {
+                              if (prev[i].name === x.name) {
+                                continue;
+                              }
+                              prev[i].listNum = temp.length + 1;
+                              temp.push(prev[i]);
                             }
-                            prev[i].listNum = temp.length + 1;
-                            temp.push(prev[i]);
-                          }
-                          return temp;
-                        })
-                      }
-                    />
+
+                            if (temp.length === 0) {
+                              setShowSelectQueryRadius(false);
+                            }
+                            return temp;
+                          })
+                        }
+                      />
+                    </Box>
                   </Box>
-                </Box>
-              ))}
+                ))}
+              </FadeIn>
             </Box>
-            <Box w="full" textAlign="center" my="16">
-              <Button
-                w="80%"
-                colorScheme="whatsapp"
-                variant="solid"
-                onClick={() => fireSendQuery(selPlaces, setResults)}
-              >
-                Search by example
-              </Button>
-            </Box>
+            {!showSelectQueryRadius && (
+              <Box w="full" textAlign="center" my="16">
+                <Button
+                  leftIcon={<ArrowDownIcon />}
+                  colorScheme="teal"
+                  variant="outline"
+                  onClick={() => setShowSelectQueryRadius(true)}
+                >
+                  Select area to search within
+                </Button>
+              </Box>
+            )}
           </Box>
         ) : (
           <Text fontSize="md">No selection yet</Text>

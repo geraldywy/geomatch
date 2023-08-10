@@ -33,6 +33,7 @@ export default function Result({ res, num }) {
             },
             listNum: idx + 1,
           }))}
+          skipOnGoogleApiLoaded
         />
       </Box>
     );
