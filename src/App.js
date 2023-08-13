@@ -18,6 +18,7 @@ function App() {
   const [showSelectQueryRadius, setShowSelectQueryRadius] = useState(false);
 
   const [circleRadius, setCircleRadius] = useState(0);
+  const [isLoadingResult, setIsLoadingResult] = useState(false);
 
   return (
     <ChakraProvider theme={theme}>
@@ -69,6 +70,8 @@ function App() {
               circleRef={circleRef}
               circleRadius={circleRadius}
               setCircleRadius={setCircleRadius}
+              isLoadingResult={isLoadingResult}
+              setIsLoadingResult={setIsLoadingResult}
             />
           </Box>
         </Box>

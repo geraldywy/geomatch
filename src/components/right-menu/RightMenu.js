@@ -4,6 +4,7 @@ import { fireQueryByRadiusReq } from '../../api/api';
 import SelectExample from './SelectExample';
 import SelectQueryRadius from './SelectQueryRadius';
 import { SearchIcon } from '@chakra-ui/icons';
+import { useState } from 'react';
 
 export default function RightMenu({
   selPlaces,
@@ -18,8 +19,13 @@ export default function RightMenu({
   circleRef,
   circleRadius,
   setCircleRadius,
+  isLoadingResult,
+  setIsLoadingResult,
 }) {
-  console.log();
+  const [numResultToReturn, setNumResultToReturn] = useState(5);
+  const [noOverlap, setNoOverlap] = useState(false);
+  const [allowDuplicates, setAllowDuplicates] = useState(false);
+
   return (
     <Box
       border="1px solid rgb(63,94,251)"
@@ -43,6 +49,12 @@ export default function RightMenu({
         show={showSelectQueryRadius}
         circleRadius={circleRadius}
         setCircleRadius={setCircleRadius}
+        numResultToReturn={numResultToReturn}
+        setNumResultToReturn={setNumResultToReturn}
+        noOverlap={noOverlap}
+        setNoOverlap={setNoOverlap}
+        allowDuplicates={allowDuplicates}
+        setAllowDuplicates={setAllowDuplicates}
       />
 
       {showSelectQueryRadius && (
@@ -50,13 +62,19 @@ export default function RightMenu({
           <Button
             colorScheme="whatsapp"
             variant="outline"
+            isLoading={isLoadingResult}
+            loadingText="Processing"
             onClick={() =>
               fireQueryByRadiusReq(
                 selPlaces,
                 setResults,
                 circleRef.getCenter().lat(),
                 circleRef.getCenter().lng(),
-                circleRadius
+                circleRadius,
+                setIsLoadingResult,
+                numResultToReturn,
+                noOverlap,
+                allowDuplicates
               )
             }
             leftIcon={<SearchIcon />}

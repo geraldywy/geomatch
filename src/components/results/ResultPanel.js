@@ -5,6 +5,9 @@ import { InfoOutlineIcon } from '@chakra-ui/icons';
 import FadeIn from 'react-fade-in/lib/FadeIn';
 
 export default function ResultPanel({ results }) {
+  if (!results) {
+    return null;
+  }
   return (
     <Box p="4">
       <Heading>Results</Heading>

@@ -96,6 +96,7 @@ export default function GMaps({
           onChange={onMapChange}
         >
           {selPlaces &&
+            selPlaces.length > 0 &&
             selPlaces.map(({ geometry, name, listNum }, index) => (
               <Marker
                 key={index}

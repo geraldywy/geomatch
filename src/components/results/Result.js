@@ -126,10 +126,10 @@ export default function Result({ res, num }) {
               alignItems="center"
               columnGap="2"
             >
-              <Text>Node cost: {cost.toFixed(5)}</Text>
+              <Text>Node cost: {cost.toFixed(3)}</Text>
               <Tooltip
                 label="Node cost is the total absolute distance (in km) deviated from the corresponding given point in the query."
-                fontSize="md"
+                fontSize="sm"
               >
                 <InfoOutlineIcon />
               </Tooltip>
@@ -168,11 +168,11 @@ export default function Result({ res, num }) {
             my="1"
           >
             <Text size="sm">
-              Cost: {res.ttl_cost ? res.ttl_cost.toFixed(5) : 'N/A'}
+              Cost: {res.ttl_cost ? res.ttl_cost.toFixed(3) : 'N/A'}
             </Text>
             <Tooltip
               label="Cost is estimated as the total absolute distance (in km) deviated from given query."
-              fontSize="md"
+              fontSize="sm"
             >
               <InfoOutlineIcon />
             </Tooltip>
