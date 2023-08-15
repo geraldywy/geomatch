@@ -15,7 +15,6 @@ function App() {
   const [mapRef, setMapRef] = useState(null);
   const [mapsRef, setMapsRef] = useState(null);
   const [circleRef, setCircleRef] = useState(null);
-  const [showSelectQueryRadius, setShowSelectQueryRadius] = useState(false);
 
   const [circleRadius, setCircleRadius] = useState(0);
   const [isLoadingResult, setIsLoadingResult] = useState(false);
@@ -63,8 +62,6 @@ function App() {
               setResults={setResults}
               queryCenter={queryCenter}
               setQueryCenter={setQueryCenter}
-              showSelectQueryRadius={showSelectQueryRadius}
-              setShowSelectQueryRadius={setShowSelectQueryRadius}
               mapRef={mapRef}
               mapsRef={mapsRef}
               circleRef={circleRef}

@@ -7,14 +7,15 @@ import {
   Text,
 } from '@chakra-ui/react';
 import { usePlacesWidget } from 'react-google-autocomplete';
-import { ArrowDownIcon, DeleteIcon } from '@chakra-ui/icons';
+import { DeleteIcon, TriangleDownIcon } from '@chakra-ui/icons';
 import FadeIn from 'react-fade-in/lib/FadeIn';
 
 export default function SelectExample({
   selPlaces,
   setSelPlaces,
-  showSelectQueryRadius,
-  setShowSelectQueryRadius,
+  canShow,
+  forward,
+  resetIndex,
 }) {
   const { ref } = usePlacesWidget({
     apiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
@@ -91,16 +92,16 @@ export default function SelectExample({
 
   return (
     <Box w="full">
-      <Heading mb="4" as="h1" size="md">
+      <Heading mb="4" as="h1" size="md" my="4">
         Add a query point:
       </Heading>
 
       <Box display="flex" alignItems="center" columnGap="4">
         <Text fontSize="lg">Location:</Text>
-        <Input placeholder="Enter a location" size="md" ref={ref} mr="6" />
+        <Input placeholder="Enter a location" size="sm" ref={ref} mr="6" />
       </Box>
 
-      <Box my="12">
+      <Box mt="12" mb={canShow ? '3' : '7'}>
         {selPlaces && selPlaces.length > 0 ? (
           <Box>
             <Heading as="h1" size="md" pb="2">
@@ -131,7 +132,7 @@ export default function SelectExample({
                             }
 
                             if (temp.length === 0) {
-                              setShowSelectQueryRadius(false);
+                              resetIndex();
                             }
                             return temp;
                           })
@@ -142,16 +143,17 @@ export default function SelectExample({
                 ))}
               </FadeIn>
             </Box>
-            {!showSelectQueryRadius && (
-              <Box w="full" textAlign="center" my="16">
-                <Button
-                  leftIcon={<ArrowDownIcon />}
-                  colorScheme="teal"
+            {canShow && (
+              <Box w="full" textAlign="center" mt="5">
+                <IconButton
+                  isRound
+                  colorScheme="telegram"
+                  aria-label="Next step"
+                  size="lg"
                   variant="outline"
-                  onClick={() => setShowSelectQueryRadius(true)}
-                >
-                  Select area to search within
-                </Button>
+                  icon={<TriangleDownIcon />}
+                  onClick={forward}
+                />
               </Box>
             )}
           </Box>
