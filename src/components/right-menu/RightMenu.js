@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/layout';
 import { fireQueryByRadiusReq } from '../../api/api';
 import SelectExample from './SelectExample';
 import SelectQueryRadius from './SelectQueryRadius';
-import { ArrowUpIcon, SearchIcon, TriangleUpIcon } from '@chakra-ui/icons';
+import { SearchIcon, TriangleUpIcon } from '@chakra-ui/icons';
 import { useState } from 'react';
 import {
   Step,
@@ -17,6 +17,7 @@ import {
   Stepper,
   useSteps,
   Text,
+  Heading,
 } from '@chakra-ui/react';
 import AdvancedQueryOptions from './AdvancedQueryOptions';
 
@@ -137,36 +138,39 @@ export default function RightMenu({
   ];
 
   return (
-    <Box
-      border="1px solid rgb(63,94,251)"
-      py="10"
-      px="5"
-      borderRadius="xl"
-      boxShadow="xl"
-    >
-      <Stepper size="lg" index={activeStep} orientation="vertical">
-        {steps.map((step, index) => (
-          <Step key={index} w="100%">
-            <StepIndicator>
-              <StepStatus
-                complete={<StepIcon />}
-                incomplete={<StepNumber />}
-                active={<StepNumber />}
-              />
-            </StepIndicator>
+    <Box>
+      <Box
+        // border="1px solid rgb(63,94,251)"
+        pt="5"
+        pb="10"
+        px="5"
+        borderRadius="xl"
+        boxShadow="xl"
+      >
+        <Stepper size="lg" index={activeStep} orientation="vertical">
+          {steps.map((step, index) => (
+            <Step key={index} w="100%">
+              <StepIndicator>
+                <StepStatus
+                  complete={<StepIcon />}
+                  incomplete={<StepNumber />}
+                  active={<StepNumber />}
+                />
+              </StepIndicator>
 
-            <Box w="80%">
-              <StepTitle>{step.title}</StepTitle>
-              <StepDescription>
-                <Text maxW="320px">{step.description}</Text>
-              </StepDescription>
-              <Box>{step.content}</Box>
-            </Box>
+              <Box w="80%">
+                <StepTitle>{step.title}</StepTitle>
+                <StepDescription>
+                  <Text maxW="320px">{step.description}</Text>
+                </StepDescription>
+                <Box>{step.content}</Box>
+              </Box>
 
-            <StepSeparator />
-          </Step>
-        ))}
-      </Stepper>
+              <StepSeparator />
+            </Step>
+          ))}
+        </Stepper>
+      </Box>
     </Box>
   );
 }
