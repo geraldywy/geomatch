@@ -9,14 +9,17 @@ import {
   Text,
   Textarea,
   useStatStyles,
+  Flex,
 } from '@chakra-ui/react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import FadeIn from 'react-fade-in/lib/FadeIn';
-import { AiOutlineUser, BiUser, RiSendPlaneFill } from 'react-icons/all';
+import { BiUser, RiSendPlaneFill } from 'react-icons/all';
+import { fireChatReq } from '../../api/api';
+import botAvatarPicUrl from './me.jpg';
 
 export default function Chat({ inView }) {
   const [avatarBadgeColor, setAvatarBadgeColor] = useState('tomato');
-  const [chatRecord, setChatRecord] = useState([]);
+  const [chatRecords, setChatRecords] = useState([]);
   const [loaded, setLoaded] = useState(false);
   const [ranFlag, setRanFlag] = useState(false);
   const [timeLeft, setTimeLeft] = useState(1);
@@ -25,17 +28,17 @@ export default function Chat({ inView }) {
     'Yellow! I am Gerald Bot (super creative I know), tell me what kind of spatial example you are looking for. I am here to help you out! 🤗';
 
   useEffect(() => {
-    if (!loaded) {
+    if (!loaded || ranFlag) {
       return;
     }
     setRanFlag(true);
     if (!timeLeft) {
-      setChatRecord([
-        {
+      setChatRecords(prev =>
+        prev.concat({
           from: 'bot',
           message: openingMessage,
-        },
-      ]);
+        })
+      );
       setAvatarBadgeColor('green.500');
       return;
     }
@@ -65,12 +68,12 @@ export default function Chat({ inView }) {
     }
 
     if (!timeLeft) {
-      setChatRecord([
-        {
+      setChatRecords(prev =>
+        prev.concat({
           from: 'bot',
           message: openingMessage,
-        },
-      ]);
+        })
+      );
       setAvatarBadgeColor('green.500');
       return;
     }
@@ -89,16 +92,13 @@ export default function Chat({ inView }) {
 
   return (
     <Box>
-      <Box mx="auto" w="45%" p="5" borderWidth="1px" borderRadius="lg">
+      <Box mx="auto" w="60vw" p="5" borderWidth="1px" borderRadius="lg">
         <ChatHeader avatarBadgeColor={avatarBadgeColor} />
-        <ChatBox chatRecord={chatRecord} setChatRecord={setChatRecord} />
+        <ChatBox chatRecords={chatRecords} setChatRecords={setChatRecords} />
       </Box>
     </Box>
   );
 }
-
-const botAvatarPicUrl =
-  'https://www.dropbox.com/scl/fi/zpp0t7oizwglg7n6vm8rn/Photo-29-7-23-17-43-41-1-edited-1.jpg?rlkey=3zaomj4pk8xry3uod3ar73hsw&raw=1';
 
 const ChatHeader = ({ avatarBadgeColor }) => {
   return (
@@ -123,77 +123,112 @@ const ChatHeader = ({ avatarBadgeColor }) => {
   );
 };
 
-const ChatBox = ({ chatRecord, setChatRecord }) => {
+const ChatBox = ({ chatRecords, setChatRecords }) => {
   const [message, setMessage] = useState('');
+  const [isLoadingResult, setIsLoadingResult] = useState(false);
+
+  const [chatId, setChatId] = useState('');
+  const [modelToUse, setModelToUse] = useState(0);
+  const [promptToUse, setPromptToUse] = useState(0);
+  const [prependPrevMsg, setPrependPrevMsg] = useState(false);
+
+  const submitUserMessage = () => {
+    if (message === '') {
+      return;
+    }
+    setChatRecords(prev => prev.concat({ from: 'user', message }));
+    fireChatReq(
+      message,
+      setChatRecords,
+      setIsLoadingResult,
+      chatId,
+      setChatId,
+      modelToUse,
+      setModelToUse,
+      promptToUse,
+      setPromptToUse,
+      prependPrevMsg,
+      setPrependPrevMsg
+    );
+
+    setMessage('');
+  };
   return (
-    <Box
+    <Flex
+      direction="column"
       pt="3"
-      pb="8"
+      pb="5"
       px="5"
       bgColor="#040D12"
       mt="3"
       borderRadius="lg"
       height="60vh"
-      overflow="auto"
     >
-      <Box h="100%" position="relative">
-        {chatRecord.map((record, i) => (
-          <IndividualChatMessage key={i} record={record} />
-        ))}
+      <Box flex="1" overflowY="scroll">
+        <ChatMessages chatRecords={chatRecords} />
+      </Box>
 
-        <Box position="absolute" bottom="0" w="100%">
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="flex-end"
-            columnGap="7"
-          >
-            <Box w="80%">
-              <Textarea
-                variant="outline"
-                borderColor="whiteAlpha.600"
-                onKeyDown={e => {
-                  if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    if (message === '') {
-                      return;
-                    }
-                    setChatRecord(prev =>
-                      prev.concat({ from: 'user', message })
-                    );
-                    setMessage('');
-                  }
-                }}
-                onChange={e => setMessage(e.target.value)}
-                value={message}
-              />
-            </Box>
-            <IconButton
-              mr="2"
-              colorScheme="telegram"
-              aria-label="Send message"
-              size="lg"
-              isRound="true"
+      <Box w="100%" mt="3">
+        <Box
+          display="flex"
+          alignItems="center"
+          justifyContent="flex-end"
+          columnGap="7"
+        >
+          <Box w="80%">
+            <Textarea
               variant="outline"
-              icon={<RiSendPlaneFill />}
-              onClick={() => {
-                if (message === '') {
-                  return;
+              borderColor="whiteAlpha.600"
+              onKeyDown={e => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                  e.preventDefault();
+                  submitUserMessage();
                 }
-                setChatRecord(prev => prev.concat({ from: 'user', message }));
-                setMessage('');
               }}
-              isDisabled={message === ''}
+              onChange={e => setMessage(e.target.value)}
+              value={message}
             />
           </Box>
+          <IconButton
+            mr="2"
+            colorScheme="telegram"
+            aria-label="Send message"
+            size="lg"
+            isRound="true"
+            variant="outline"
+            icon={<RiSendPlaneFill />}
+            onClick={submitUserMessage}
+            isDisabled={message === ''}
+          />
         </Box>
       </Box>
+    </Flex>
+  );
+};
+
+const ChatMessages = ({ chatRecords }) => {
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatRecords]);
+
+  return (
+    <Box>
+      {chatRecords.map((record, i) => (
+        <IndividualChatMessage key={i} record={record} />
+      ))}
+      <Box ref={messagesEndRef} />
     </Box>
   );
 };
 
 const IndividualChatMessage = ({ record }) => {
-  const isBot = record.from === 'bot';
+  const isBot = record.from.toLowerCase() === 'bot';
   return (
     <FadeIn>
       <Box my="5">
