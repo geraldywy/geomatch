@@ -17,7 +17,7 @@ import { BiUser, RiSendPlaneFill } from 'react-icons/all';
 import { fireChatReq } from '../../api/api';
 import botAvatarPicUrl from './me.jpg';
 
-export default function Chat({ inView }) {
+export default function Chat({ inView, setResults }) {
   const [avatarBadgeColor, setAvatarBadgeColor] = useState('tomato');
   const [chatRecords, setChatRecords] = useState([]);
   const [loaded, setLoaded] = useState(false);
@@ -94,7 +94,11 @@ export default function Chat({ inView }) {
     <Box>
       <Box mx="auto" w="60vw" p="5" borderWidth="1px" borderRadius="lg">
         <ChatHeader avatarBadgeColor={avatarBadgeColor} />
-        <ChatBox chatRecords={chatRecords} setChatRecords={setChatRecords} />
+        <ChatBox
+          chatRecords={chatRecords}
+          setChatRecords={setChatRecords}
+          setResults={setResults}
+        />
       </Box>
     </Box>
   );
@@ -123,7 +127,7 @@ const ChatHeader = ({ avatarBadgeColor }) => {
   );
 };
 
-const ChatBox = ({ chatRecords, setChatRecords }) => {
+const ChatBox = ({ chatRecords, setChatRecords, setResults }) => {
   const [message, setMessage] = useState('');
   const [isLoadingResult, setIsLoadingResult] = useState(false);
 
@@ -148,7 +152,8 @@ const ChatBox = ({ chatRecords, setChatRecords }) => {
       promptToUse,
       setPromptToUse,
       prependPrevMsg,
-      setPrependPrevMsg
+      setPrependPrevMsg,
+      setResults
     );
 
     setMessage('');

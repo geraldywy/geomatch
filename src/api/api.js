@@ -54,7 +54,8 @@ export const fireChatReq = async (
   promptToUse,
   setPromptToUse,
   prependPrevMsg,
-  setPrependPrevMsg
+  setPrependPrevMsg,
+  setResults
 ) => {
   setIsLoadingResult(true);
   const body = JSON.stringify({
@@ -82,6 +83,61 @@ export const fireChatReq = async (
     setModelToUse(data.next_model_to_use);
     setPromptToUse(data.next_prompt_to_use);
     setPrependPrevMsg(data.next_prepend_prev_message);
+
+    // catch final state
+    const specialString =
+      "Hang on tight! I'm doing some quick maths to find the best match!";
+    if (data.message.endsWith(specialString)) {
+      setChatId(''); // allow chat id to renew
+      triggerChatSearch(
+        data.chat_id,
+        setChatRecords,
+        setResults,
+        setIsLoadingResult
+      );
+      setChatRecords(prev =>
+        prev.concat({ from: 'bot', message: 'processing GIF' })
+      );
+    } else {
+      setIsLoadingResult(false);
+    }
+  } catch (error) {
+    console.log(error);
+    setIsLoadingResult(false);
+  }
+};
+
+const triggerChatSearch = async (
+  chatId,
+  setChatRecords,
+  setResults,
+  setIsLoadingResult
+) => {
+  setIsLoadingResult(true);
+  const body = JSON.stringify({
+    chat_id: chatId,
+  });
+
+  const requestOptions = {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: body,
+  };
+
+  try {
+    const response = await fetch(
+      `${process.env.REACT_APP_API_URL}/chat-search`,
+      requestOptions
+    );
+    const data = await response.json();
+    const suf =
+      data.resp.length > 1
+        ? 's! Woohoo!'
+        : '. Sorry about that! You can always try again with a different example or a search area to look within. :)';
+    setChatRecords(prev =>
+      prev.concat(`I found ${data.resp.length} result${suf}`)
+    );
+    setResults(data.resp);
   } catch (error) {
     console.log(error);
   } finally {

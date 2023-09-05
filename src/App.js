@@ -125,7 +125,7 @@ function App() {
               </Box>
             </TabPanel>
             <TabPanel>
-              <Chat inView={tabIndex === 1} />
+              <Chat inView={tabIndex === 1} setResults={setResults} />
             </TabPanel>
           </TabPanels>
         </Tabs>
