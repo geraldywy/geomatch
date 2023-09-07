@@ -17,6 +17,7 @@
     "react-fade-in": "^2.0.1",
     "react-google-autocomplete": "^2.7.3",
     "react-icons": "^3.11.0",
+    "react-loading": "^2.0.3",
     "react-medium-image-zoom": "^5.1.8",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"

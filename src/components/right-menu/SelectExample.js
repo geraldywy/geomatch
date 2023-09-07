@@ -101,7 +101,7 @@ export default function SelectExample({
         <Input placeholder="Enter a location" size="sm" ref={ref} mr="6" />
       </Box>
 
-      <Box mt="12" mb={canShow ? '3' : '7'}>
+      <Box mt="8" mb={canShow ? '3' : '7'}>
         {selPlaces && selPlaces.length > 0 ? (
           <Box>
             <Heading as="h1" size="md" pb="2">
