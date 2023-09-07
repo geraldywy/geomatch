@@ -130,12 +130,17 @@ const triggerChatSearch = async (
       requestOptions
     );
     const data = await response.json();
-    const suf =
+    const msg =
       data.resp.length > 1
-        ? 's! Woohoo!'
-        : '. Sorry about that! You can always try again with a different example or a search area to look within. :)';
+        ? `Here are the top ${data.resp.length} results I found! Woohoo! Hope you are happy with them! Otherwise, feel free to continue talking with me and we can try something else!`
+        : data.resp.length === 1
+        ? `Phew, I managed to find one result. Hopefully, it's to your liking! Otherwise, feel free to continue talking with me and we can try something else!`
+        : 'I did not manage to find anything... sorry about that! You can always try again with a different example or a search area to look within. :)';
     setChatRecords(prev =>
-      prev.concat(`I found ${data.resp.length} result${suf}`)
+      prev.concat({
+        from: 'bot',
+        message: msg,
+      })
     );
     setResults(data.resp);
   } catch (error) {

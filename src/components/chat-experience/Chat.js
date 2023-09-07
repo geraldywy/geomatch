@@ -10,12 +10,15 @@ import {
   Textarea,
   useStatStyles,
   Flex,
+  Image,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import FadeIn from 'react-fade-in/lib/FadeIn';
 import { BiUser, RiSendPlaneFill } from 'react-icons/all';
 import { fireChatReq } from '../../api/api';
 import botAvatarPicUrl from './me.jpg';
+import workingGif from './working.gif';
+import ReactLoading from 'react-loading';
 
 export default function Chat({ inView, setResults }) {
   const [avatarBadgeColor, setAvatarBadgeColor] = useState('tomato');
@@ -137,7 +140,7 @@ const ChatBox = ({ chatRecords, setChatRecords, setResults }) => {
   const [prependPrevMsg, setPrependPrevMsg] = useState(false);
 
   const submitUserMessage = () => {
-    if (message === '') {
+    if (message === '' || isLoadingResult) {
       return;
     }
     setChatRecords(prev => prev.concat({ from: 'user', message }));
@@ -173,14 +176,31 @@ const ChatBox = ({ chatRecords, setChatRecords, setResults }) => {
         <ChatMessages chatRecords={chatRecords} />
       </Box>
 
-      <Box w="100%" mt="3">
+      <Box mt="3">
+        {isLoadingResult && (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            my="5px"
+            columnGap="2"
+          >
+            <Text>Gerald Bot is typing</Text>
+            <ReactLoading
+              type="bubbles"
+              color="#ffffff"
+              height="18px"
+              width="20px"
+            />
+          </Box>
+        )}
         <Box
           display="flex"
           alignItems="center"
           justifyContent="flex-end"
           columnGap="7"
         >
-          <Box w="80%">
+          <Box ml="5vw" w="80vw">
             <Textarea
               variant="outline"
               borderColor="whiteAlpha.600"
@@ -203,7 +223,7 @@ const ChatBox = ({ chatRecords, setChatRecords, setResults }) => {
             variant="outline"
             icon={<RiSendPlaneFill />}
             onClick={submitUserMessage}
-            isDisabled={message === ''}
+            isDisabled={message === '' || isLoadingResult}
           />
         </Box>
       </Box>
@@ -249,7 +269,11 @@ const IndividualChatMessage = ({ record }) => {
             icon={<BiUser fontSize="1.5rem" />}
           />
           <Box maxW="70%" mx="5" bgColor="#1B262C" p="4" borderRadius="xl">
-            <Text fontSize="sm">{record.message}</Text>
+            {record.message === 'processing GIF' ? (
+              <Image src={workingGif} alt={record.message} />
+            ) : (
+              <Text fontSize="sm">{record.message}</Text>
+            )}
           </Box>
         </Box>
       </Box>
