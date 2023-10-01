@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/geomatch/static/css/main.068dbea6.css",
+    "main.js": "/geomatch/static/js/main.60fd395d.js",
+    "static/js/787.2a4303d2.chunk.js": "/geomatch/static/js/787.2a4303d2.chunk.js",
+    "static/media/working.gif": "/geomatch/static/media/working.ab21f36b9b0062f0ebb2.gif",
+    "static/media/me.jpg": "/geomatch/static/media/me.77a448642cc95c614d14.jpg",
+    "static/media/pin3.png": "/geomatch/static/media/pin3.ddd597a7a9b54f0b0afd.png",
+    "static/media/pin1.png": "/geomatch/static/media/pin1.fe5b86197ad29fcb507d.png",
+    "static/media/pin5.png": "/geomatch/static/media/pin5.9a3786e3384b5a5e53a8.png",
+    "static/media/pin4.png": "/geomatch/static/media/pin4.da5a4ce3f278d3315364.png",
+    "static/media/pin2.png": "/geomatch/static/media/pin2.10b92b35f8cbe9f7b427.png",
+    "static/media/no_image_available.jpeg": "/geomatch/static/media/no_image_available.09ea9f6b1352b3452d9d.jpeg",
+    "index.html": "/geomatch/index.html",
+    "main.068dbea6.css.map": "/geomatch/static/css/main.068dbea6.css.map",
+    "main.60fd395d.js.map": "/geomatch/static/js/main.60fd395d.js.map",
+    "787.2a4303d2.chunk.js.map": "/geomatch/static/js/787.2a4303d2.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.068dbea6.css",
+    "static/js/main.60fd395d.js"
+  ]
+}
