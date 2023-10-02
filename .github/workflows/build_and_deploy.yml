@@ -23,6 +23,9 @@ jobs:
         with:
           push: true
           tags: eesketit/geomatch
+          secrets: |
+            "gmaps_api_key=${{ secrets.GMAPS_API_KEY }}"
+            "api_url=${{ secrets.API_URL }}"
 
   deploy:
     runs-on: ubuntu-latest
