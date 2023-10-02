@@ -1,10 +1,14 @@
 # Use an official Node.js runtime as the base image
 FROM node:14
 
-RUN --mount=type=secret,id=gmaps_api_key,gmaps_api_key_sec=$(cat /run/secrets/gmaps_api_key) \
+RUN --mount=type=secret,id=gmaps_api_key
+
+RUN gmaps_api_key_sec=$(cat /run/secrets/gmaps_api_key) \
 export REACT_APP_GOOGLE_MAPS_API_KEY=gmaps_api_key_sec
 
-RUN --mount=type=secret,id=api_url,api_url_sec=$(cat /run/secrets/api_url) \
+RUN --mount=type=secret,id=api_url
+
+RUN api_url_sec=$(cat /run/secrets/api_url) \
 export REACT_APP_API_URL=api_url_sec
 
 # Set the working directory in the container
