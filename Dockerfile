@@ -11,6 +11,8 @@ RUN --mount=type=secret,id=api_url
 RUN api_url_sec=$(cat /run/secrets/api_url) \
 export REACT_APP_API_URL=api_url_sec
 
+RUN cat REACT_APP_API_URL
+
 # Set the working directory in the container
 WORKDIR /app
 
