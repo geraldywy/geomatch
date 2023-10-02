@@ -63,7 +63,7 @@ function App() {
         >
           <Heading size="2xl">GeoMatch</Heading>
           <Text as="i" fontSize="md">
-            Spatial Search By Example
+            Spatial Search By Example (this is a test)
           </Text>
         </Box>
 
