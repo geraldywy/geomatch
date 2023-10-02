@@ -11,11 +11,13 @@ import {
   TabPanel,
   TabPanels,
   Button,
+  useColorMode,
 } from '@chakra-ui/react';
 import GMaps from './components/maps/GMaps';
 import ResultPanel from './components/results/ResultPanel';
 import RightMenu from './components/right-menu/RightMenu';
 import Chat from './components/chat-experience/Chat';
+import ColorModeSwitch from './components/misc/ColorModeSwitch';
 
 function App() {
   const [selPlaces, setSelPlaces] = useState([]);
@@ -48,23 +50,32 @@ function App() {
     scrollToBottom();
   }, [results]);
 
+  const { colorMode } = useColorMode();
+
+  const darkBorderColor = '#333333';
+  const lightBorderColor = '#f5f5f5';
+
   return (
     <ChakraProvider theme={theme}>
       <Box px="5%">
-        <Box
-          pt="8"
-          pb="6"
-          px="1"
-          display="flex"
-          flexDir="column"
-          justifyContent="center"
-          alignItems="left"
-          rowGap="1"
-        >
-          <Heading size="2xl">GeoMatch</Heading>
-          <Text as="i" fontSize="md">
-            Spatial Search By Example (this is a test)
-          </Text>
+        <Box display="flex" justifyContent="space-between">
+          <Box
+            pt="8"
+            pb="6"
+            px="1"
+            display="flex"
+            flexDir="column"
+            justifyContent="center"
+            alignItems="left"
+            rowGap="1"
+          >
+            <Heading size="2xl">GeoMatch</Heading>
+            <Text as="i" fontSize="md">
+              Spatial Search By Example
+            </Text>
+          </Box>
+
+          <ColorModeSwitch />
         </Box>
 
         <Tabs
@@ -107,7 +118,10 @@ function App() {
                   <Box
                     display="flex"
                     justifyContent="center"
-                    border="1px solid rgb(63,94,251)"
+                    border={
+                      colorMode === 'light' ? lightBorderColor : darkBorderColor
+                    }
+                    boxShadow="xl"
                   >
                     <GMaps
                       selPlaces={selPlaces}

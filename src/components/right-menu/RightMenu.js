@@ -18,6 +18,7 @@ import {
   useSteps,
   Text,
   Heading,
+  useColorMode,
 } from '@chakra-ui/react';
 import AdvancedQueryOptions from './AdvancedQueryOptions';
 
@@ -137,6 +138,11 @@ export default function RightMenu({
     },
   ];
 
+  const { colorMode } = useColorMode();
+
+  const darkBorderColor = '#333333';
+  const lightBorderColor = '#f5f5f5';
+
   return (
     <Box>
       <Box
@@ -146,6 +152,9 @@ export default function RightMenu({
         px="5"
         borderRadius="xl"
         boxShadow="xl"
+        py="5"
+        border="1px solid"
+        borderColor={colorMode === 'light' ? lightBorderColor : darkBorderColor}
       >
         <Stepper size="lg" index={activeStep} orientation="vertical">
           {steps.map((step, index) => (

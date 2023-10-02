@@ -11,6 +11,7 @@ import {
   useStatStyles,
   Flex,
   Image,
+  useColorMode,
 } from '@chakra-ui/react';
 import { useEffect, useRef, useState } from 'react';
 import FadeIn from 'react-fade-in/lib/FadeIn';
@@ -161,13 +162,16 @@ const ChatBox = ({ chatRecords, setChatRecords, setResults }) => {
 
     setMessage('');
   };
+
+  const { colorMode } = useColorMode();
+
   return (
     <Flex
       direction="column"
       pt="3"
       pb="5"
       px="5"
-      bgColor="#040D12"
+      bgColor={colorMode === 'dark' ? '#040D12' : '#F5F5F5'}
       mt="3"
       borderRadius="lg"
       height="60vh"
@@ -200,7 +204,11 @@ const ChatBox = ({ chatRecords, setChatRecords, setResults }) => {
           justifyContent="flex-end"
           columnGap="7"
         >
-          <Box ml="5vw" w="80vw">
+          <Box
+            ml="5vw"
+            w="80vw"
+            backgroundColor={colorMode === 'light' ? '#FFFFFF' : ''}
+          >
             <Textarea
               variant="outline"
               borderColor="whiteAlpha.600"
@@ -258,6 +266,8 @@ const ChatMessages = ({ chatRecords }) => {
 
 const IndividualChatMessage = ({ record }) => {
   const isBot = record.from.toLowerCase() === 'bot';
+  const { colorMode } = useColorMode();
+
   return (
     <FadeIn>
       <Box my="5">
@@ -272,7 +282,13 @@ const IndividualChatMessage = ({ record }) => {
             bg="teal.500"
             icon={<BiUser fontSize="1.5rem" />}
           />
-          <Box maxW="70%" mx="5" bgColor="#1B262C" p="4" borderRadius="xl">
+          <Box
+            maxW="70%"
+            mx="5"
+            bgColor={colorMode === 'dark' ? '#1B262C' : '#EEEDED'}
+            p="4"
+            borderRadius="xl"
+          >
             {record.message === 'processing GIF' ? (
               <Image src={workingGif} alt={record.message} />
             ) : (

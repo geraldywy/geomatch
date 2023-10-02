@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import Marker from './Marker';
 import './style.css';
 import GoogleMap from 'google-maps-react-markers';
-import { Box } from '@chakra-ui/react';
+import { Box, useColorMode } from '@chakra-ui/react';
 
 export default function GMaps({
   selPlaces,
