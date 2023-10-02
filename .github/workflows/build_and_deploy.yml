@@ -24,18 +24,20 @@ jobs:
           push: true
           tags: eesketit/geomatch
 
-  build:
-    name: Build
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: copy file via ssh key
+      - name: Checkout code
+        uses: actions/checkout@v2
+      - name: Copy deploy_frontend.sh via SSH
         uses: appleboy/scp-action@v0.1.4
         with:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: './deploy_frontend.sh'
-          target: '/home/ec2-user'
+          source: './deploy_frontend.sh' # Path to the file in your repository
+          target: '/home/ec2-user' # Destination directory on the EC2 instance
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.0.0
         with:
