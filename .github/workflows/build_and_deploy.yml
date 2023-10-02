@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.HOST }}
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.KEY }}
-          source: 'deploy_frontend.sh'
+          source: './deploy_frontend.sh'
           target: '/home/ec2-user/deploy_frontend.sh'
       - name: executing remote ssh commands using ssh key
         uses: appleboy/ssh-action@v1.0.0
