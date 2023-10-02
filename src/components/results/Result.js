@@ -11,13 +11,15 @@ import {
   Tooltip,
   Image,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { getMarker } from '../maps/Marker';
 import GMaps from '../maps/GMaps';
 import noImageAvail from './no_image_available.jpeg';
 
 export default function Result({ res, num }) {
   const [expand, setExpand] = useState(false);
+
+  useEffect(() => setExpand(false), [res]);
 
   const ShowExpandedResult = ({ res }) => {
     return (
@@ -128,7 +130,7 @@ export default function Result({ res, num }) {
             >
               <Text>Node cost: {cost.toFixed(3)}</Text>
               <Tooltip
-                label="Node cost is the total absolute distance (in km) deviated from the corresponding given point in the query."
+                label="Node cost is the total absolute distance (in metres) deviated from the corresponding given point in the query."
                 fontSize="sm"
               >
                 <InfoOutlineIcon />
@@ -171,7 +173,7 @@ export default function Result({ res, num }) {
               Cost: {res.ttl_cost ? res.ttl_cost.toFixed(3) : 'N/A'}
             </Text>
             <Tooltip
-              label="Cost is estimated as the total absolute distance (in km) deviated from given query."
+              label="Cost is estimated as the total absolute distance (in metres) deviated from given query."
               fontSize="sm"
             >
               <InfoOutlineIcon />

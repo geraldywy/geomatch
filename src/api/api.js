@@ -31,7 +31,7 @@ export const fireQueryByRadiusReq = async (
 
   try {
     const response = await fetch(
-      `${process.env.REACT_APP_API_URL}/query-by-radius`,
+      `${process.env.REACT_APP_API_URL}/query`,
       requestOptions
     );
     const data = await response.json();
@@ -96,7 +96,10 @@ export const fireChatReq = async (
         setIsLoadingResult
       );
       setChatRecords(prev =>
-        prev.concat({ from: 'bot', message: 'processing GIF' })
+        prev.concat(
+          { from: 'bot', message: 'processing GIF' },
+          { from: 'bot', message: '* Gerald Bot is hard at work *' }
+        )
       );
     } else {
       setIsLoadingResult(false);

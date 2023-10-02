@@ -97,17 +97,21 @@ export default function GMaps({
         >
           {selPlaces &&
             selPlaces.length > 0 &&
-            selPlaces.map(({ geometry, name, listNum }, index) => (
-              <Marker
-                key={index}
-                lat={geometry.location.lat()}
-                lng={geometry.location.lng()}
-                markerId={name}
-                onClick={onMarkerClick}
-                style={markerStyle}
-                num={listNum}
-              />
-            ))}
+            selPlaces.map(
+              ({ geometry, name, listNum }, index) =>
+                geometry &&
+                geometry.location && (
+                  <Marker
+                    key={index}
+                    lat={geometry.location.lat()}
+                    lng={geometry.location.lng()}
+                    markerId={name}
+                    onClick={onMarkerClick}
+                    style={markerStyle}
+                    num={listNum}
+                  />
+                )
+            )}
         </GoogleMap>
         {highlighted && (
           <div className="highlighted">

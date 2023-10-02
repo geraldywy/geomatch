@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   ChakraProvider,
   Box,
@@ -33,6 +33,20 @@ function App() {
   const [isLoadingResult, setIsLoadingResult] = useState(false);
 
   const [tabIndex, setTabIndex] = useState(0);
+
+  const resStartRef = useRef(null);
+
+  const scrollToBottom = () => {
+    resStartRef.current?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'end',
+      inline: 'nearest',
+    });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [results]);
 
   return (
     <ChakraProvider theme={theme}>
@@ -130,7 +144,9 @@ function App() {
           </TabPanels>
         </Tabs>
 
-        <Box>{results != null && <ResultPanel results={results} />}</Box>
+        <Box ref={resStartRef}>
+          {results != null && <ResultPanel results={results} />}
+        </Box>
       </Box>
     </ChakraProvider>
   );
